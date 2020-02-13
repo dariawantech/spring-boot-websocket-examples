@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>Plain Web socket Example</title>
+        <title>Plain WebSocket Example</title>
         <th:block th:include="fragments/common.html :: headerfiles"></th:block>        
     </head>
     <body>
@@ -51,12 +51,15 @@
             }
 
             function connect() {
-                ws = new WebSocket('ws://localhost:8080/web-socket');
+                /*<![CDATA[*/
+                var url = /*[['ws://'+${#httpServletRequest.serverName}+':'+${#httpServletRequest.serverPort}+@{/web-socket}]]*/ 'ws://localhost:8080/web-socket';
+                /*]]>*/
+                ws = new WebSocket(url);
                 ws.onopen = function () {
-                    $("#content").html($("#content").html() + '<div class="alert alert-success">Connected to server</div>');
+                    showBroadcastMessage('<div class="alert alert-success">Connected to server</div>');
                 };
                 ws.onmessage = function (data) {
-                    $("#content").html($("#content").html() + createTextNode(data.data));
+                    showBroadcastMessage(createTextNode(data.data));
                 };
                 setConnected(true);
             }
@@ -64,7 +67,7 @@
             function disconnect() {
                 if (ws != null) {
                     ws.close();
-                    $("#content").html($("#content").html() + '<div class="alert alert-warning">Disconnected from server</div>');
+                    showBroadcastMessage('<div class="alert alert-warning">Disconnected from server</div>');
                 }
                 setConnected(false);
             }            
@@ -76,6 +79,10 @@
 
             function createTextNode(msg) {
                 return '<div class="alert alert-info">' + msg + '</div>';
+            }
+            
+            function showBroadcastMessage(message) {
+                $("#content").html($("#content").html() + message);
             }
         </script>
     </body>

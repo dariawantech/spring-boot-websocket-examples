@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>WebSocket With STOMP Broadcast Example</title>
+        <th:block th:include="fragments/common.html :: headerfiles"></th:block>        
+    </head>
+    <body>
+        <div class="container">
+            <div class="py-5 text-center">
+                <h2>Web socket</h2>
+                <p class="lead">WebSocket Broadcast - with STOMP</p>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <input type="text" id="from" class="form-control" placeholder="Choose a nickname"/>
+                            <div class="btn-group">
+                                <button type="button" id="connect" class="btn btn-sm btn-outline-secondary" onclick="connect()">Connect</button>
+                            <button type="button" id="disconnect" class="btn btn-sm btn-outline-secondary" onclick="disconnect()" disabled>Disconnect</button>
+                            </div>                        
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="input-group" id="sendmessage" style="display: none;">
+                            <input type="text" id="message" class="form-control" placeholder="Message">
+                            <div class="input-group-append">
+                                <button id="send" class="btn btn-primary" onclick="send()">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div id="content"></div>
+                    <div>
+                        <span class="float-right">
+                            <button id="clear" class="btn btn-primary" onclick="clearBroadcast()" style="display: none;">Clear</button>
+                        </span>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+
+        <script th:src="@{/webjars/stomp-websocket/2.3.3-1/stomp.js}" type="text/javascript"></script>
+        <script type="text/javascript">
+            var stompClient = null;
+            
+            function setConnected(connected) {
+                $("#from").prop("disabled", connected);
+                $("#connect").prop("disabled", connected);
+                $("#disconnect").prop("disabled", !connected);
+                if (connected) {
+                    $("#sendmessage").show();
+                } else {
+                    $("#sendmessage").hide();
+                }
+            }
+            
+            function connect() {
+                 /*<![CDATA[*/
+                var url = /*[['ws://'+${#httpServletRequest.serverName}+':'+${#httpServletRequest.serverPort}+@{/broadcast}]]*/ 'ws://localhost:8080/broadcast';
+                /*]]>*/
+                stompClient = Stomp.client(url);
+                stompClient.connect({}, function () {
+                    stompClient.subscribe('/topic/messages', function (output) {
+                        showBroadcastMessage(createTextNode(JSON.parse(output.body)));
+                    });
+                    
+                    var from = $("#from").val();
+                    var text = from + ' connected to server';
+                    clientSend({'from': 'server', 'text': text});
+                
+                    setConnected(true);
+                }, function (err) {
+                    alert('error' + err);
+                });                
+            }
+
+            function disconnect() {
+                if (stompClient != null) {
+                    stompClient.disconnect(function() {
+                        console.log('disconnected...');
+                        setConnected(false);
+                    });                    
+                }                
+            }
+            
+            function clientSend(json) {
+                stompClient.send("/app/broadcast", {}, JSON.stringify(json));
+            }
+            
+            function send() {
+                var from = $("#from").val();
+                var text = $("#message").val();
+                clientSend({'from': from, 'text': text});
+                $("#message").val("");
+            }
+
+            function createTextNode(messageObj) {
+                return '<div class="row alert alert-info"><div class="col-md-8">' +
+                        messageObj.text +
+                        '</div><div class="col-md-4 text-right"><small>[<b>' +
+                        messageObj.from +
+                        '</b> ' +
+                        messageObj.time + 
+                        ']</small>' +
+                        '</div></div>';
+            }
+            
+            function showBroadcastMessage(message) {
+                $("#content").html($("#content").html() + message);
+                $("#clear").show();
+            }
+            
+            function clearBroadcast() {
+                $("#content").html("");
+                $("#clear").hide();
+            }
+        </script>
+    </body>
+</html>
