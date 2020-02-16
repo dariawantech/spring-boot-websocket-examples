@@ -1,14 +1,14 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>WebSocket With STOMP Broadcast Example</title>
+        <title>WebSocket With STOMP & SockJS Broadcast Example</title>
         <th:block th:include="fragments/common.html :: headerfiles"></th:block>        
     </head>
     <body>
         <div class="container">
             <div class="py-5 text-center">
                 <h2>WebSocket</h2>
-                <p class="lead">WebSocket Broadcast - with STOMP</p>
+                <p class="lead">WebSocket Broadcast - with STOMP & SockJS.</p>
             </div>
             <div class="row">
                 <div class="col-md-6">
@@ -41,6 +41,7 @@
             </div>
         </div>
 
+        <script th:src="@{/webjars/sockjs-client/1.1.2/sockjs.js}" type="text/javascript"></script>
         <script th:src="@{/webjars/stomp-websocket/2.3.3-1/stomp.js}" type="text/javascript"></script>
         <script type="text/javascript">
             var stompClient = null;
@@ -57,10 +58,8 @@
             }
             
             function connect() {
-                 /*<![CDATA[*/
-                var url = /*[['ws://'+${#httpServletRequest.serverName}+':'+${#httpServletRequest.serverPort}+@{/broadcast}]]*/ 'ws://localhost:8080/broadcast';
-                /*]]>*/
-                stompClient = Stomp.client(url);
+                var socket = new SockJS('/broadcast');
+                stompClient = Stomp.over(socket);
                 stompClient.connect({}, function () {
                     stompClient.subscribe('/topic/broadcast', function (output) {
                         showBroadcastMessage(createTextNode(JSON.parse(output.body)));
@@ -89,7 +88,7 @@
                 var text = from + message;
                 clientSend({'from': 'server', 'text': text});
             }
-                    
+            
             function clientSend(json) {
                 stompClient.send("/app/broadcast", {}, JSON.stringify(json));
             }
@@ -97,7 +96,7 @@
             function send() {
                 var from = $("#from").val();
                 var text = $("#message").val();
-                clientSend({'from': from, 'text': text});
+                clientSend({'from': from, 'text': text});                
                 $("#message").val("");
             }
 
