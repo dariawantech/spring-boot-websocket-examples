@@ -40,6 +40,12 @@
             <artifactId>bootstrap</artifactId>
             <version>4.4.1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.webjars/mdbootstrap-bootstrap-material-design -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>mdbootstrap-bootstrap-material-design</artifactId>
+            <version>4.8.8</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.webjars/jquery -->
         <dependency>
             <groupId>org.webjars</groupId>

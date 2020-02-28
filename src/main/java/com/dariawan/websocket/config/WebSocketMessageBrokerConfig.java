@@ -50,13 +50,14 @@ public class WebSocketMessageBrokerConfig implements WebSocketMessageBrokerConfi
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic");
+        config.enableSimpleBroker("/topic", "/queue" ,"/user");
         config.setApplicationDestinationPrefixes("/app");
+        config.setUserDestinationPrefix("/user");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/broadcast");  // it is OK to leave it here
+        registry.addEndpoint("/broadcast");  // this is OK to leave it here
         // registry.addEndpoint("/broadcast").withSockJS();
         // custom heartbeat, every 60 sec
         registry.addEndpoint("/broadcast").withSockJS().setHeartbeatTime(60_000);
