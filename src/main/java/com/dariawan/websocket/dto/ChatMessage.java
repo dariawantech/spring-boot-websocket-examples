@@ -52,13 +52,17 @@ public class ChatMessage {
     private String time;
 
     public ChatMessage() {
-        
+        this.time = StringUtils.getCurrentTimeStamp();
+    }
+    
+    public ChatMessage(String from, String text) {
+        this();
+        this.from = from;
+        this.text = text;
     }
     
     public ChatMessage(String from, String text, String recipient) {
-        this.from = from;
-        this.text = text;
-        this.recipient = recipient;
-        this.time = StringUtils.getCurrentTimeStamp();
+        this(from, text);
+        this.recipient = recipient;  
     }
 }

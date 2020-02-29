@@ -87,17 +87,17 @@
             function sendConnection(message) {
                 var from = $("#from").val();
                 var text = from + message;
-                clientSend({'from': 'server', 'text': text});
+                sendBroadcast({'from': 'server', 'text': text});
             }
                     
-            function clientSend(json) {
+            function sendBroadcast(json) {
                 stompClient.send("/app/broadcast", {}, JSON.stringify(json));
             }
             
             function send() {
                 var from = $("#from").val();
                 var text = $("#message").val();
-                clientSend({'from': from, 'text': text});
+                sendBroadcast({'from': from, 'text': text});
                 $("#message").val("");
             }
 

@@ -3,13 +3,12 @@
     <head>
         <title>WebSocket With STOMP & SockJS Broadcast Example</title>
         <th:block th:include="fragments/common.html :: headerfiles"></th:block>
-        <link rel="stylesheet" type="text/css" th:href="@{/webjars/mdbootstrap-bootstrap-material-design/4.8.8/css/mdb.min.css}"/>        
     </head>
     <body>
         <div class="container">
             <div class="py-5 text-center">
                 <a href="/"><h2>WebSocket</h2></a>
-                <p class="lead">WebSocket Broadcast - with STOMP & SockJS.</p>
+                <p class="lead">WebSocket Chat - with STOMP & SockJS.</p>
             </div>
             <div class="row">
                 <div class="col-md-6">
@@ -23,7 +22,7 @@
                         </div>
                     </div>
                     <div class="mb-3" id="users" style="display: none;">
-                        <h4>Active users</h4>
+                        <span id="active-users-span"></span>
                         <ul id="active-users" class="list-group list-group-horizontal-sm">
                             <!--/*--> 
                             <!--/*/
@@ -37,101 +36,6 @@
                             /*/-->
                             <!--*/-->                            
                         </ul>
-                        <div class="card">
-                            <div class="card-body">
-                              <h4 class="card-title">Tags with shadows</h4>
-                              <div class="chip chip-md success-color white-text  example z-depth-2 mr-0"><i class="fas fa-tags "></i>
-                                &nbsp;&nbsp;Web Design
-                                <i class="close white-text fas fa-times"></i>
-                              </div>
-                              <div class="chip chip-md default-color white-text example z-depth-2  mr-0"><i class="fab fa-css3-alt fa-lg"></i>
-                                &nbsp;&nbsp;Css Tutorial
-                                <i class="close  white-text fas fa-times"></i>
-                              </div>
-
-                              <div class="chip chip-md  secondary-color white-text example z-depth-2 mr-0"><i class="fab fa-bootstrap fa-lg"></i>
-                                &nbsp;&nbsp;MDBootstrap
-                                <i class="close white-text fas fa-times"></i>
-                              </div>
-
-                              <div class="chip chip-md red lighten-1 white-text example z-depth-2 mr-0"><i class="fab fa-angular fa-lg"></i>
-                                &nbsp;&nbsp;Angular
-                                <i class="close white-text fas fa-times"></i>
-                              </div>
-                              <div class="chip chip-md blue lighten-1 white-text example z-depth-2 mr-0" ><i class="fab fa-react fa-lg"></i>
-                                &nbsp;&nbsp;React
-                                <i class="close white-text fas fa-times"></i>
-                              </div>
-                              <div class="chip chip-md indigo darken-1 white-text example z-depth-2  mr-0"><i class="fab fa-facebook fa-lg"></i>
-                                &nbsp;&nbsp;Facebook
-                                <i class="close white-text fas fa-times"></i>
-                              </div>
-                              <div class="chip chip-md purple-gradient white-text example z-depth-2 mr-0"><i class="fas fa-headset fa-lg"></i>
-                                &nbsp;&nbsp;mdb-team
-                                <i class="close white-text fas fa-times"></i>
-                              </div>
-                              <div class="chip chip-md success-color white-text  example z-depth-2 mr-0"><i class="fas fa-tags "></i>
-                                &nbsp;&nbsp;Web Design
-                                <i class="close white-text fas fa-times"></i>
-                              </div>
-                              <div class="chip chip-md default-color white-text example z-depth-2 mr-0"><i class="fab fa-css3-alt fa-lg"></i>
-                                &nbsp;&nbsp;Css Tutorial
-                                <i class="close  white-text fas fa-times"></i>
-                              </div>
-
-                              <div class="chip chip-md  secondary-color white-text example z-depth-2 mr-0"><i class="fab fa-bootstrap fa-lg"></i>
-                                &nbsp;&nbsp;MDBootstrap
-                                <i class="close white-text fas fa-times"></i>
-                              </div>
-
-                              <div class="chip chip-md red lighten-1 white-text example z-depth-2 mr-0"><i class="fab fa-angular fa-lg"></i>
-                                &nbsp;&nbsp;Angular
-                                <i class="close white-text fas fa-times"></i>
-                              </div>
-                              <div class="chip chip-md blue lighten-1 white-text example z-depth-2 mr-0" ><i class="fab fa-react fa-lg"></i>
-                                &nbsp;&nbsp;React
-                                <i class="close white-text fas fa-times"></i>
-                              </div>
-                              <div class="chip chip-md indigo darken-1 white-text example z-depth-2 mr-0"><i class="fab fa-facebook fa-lg"></i>
-                                &nbsp;&nbsp;Facebook
-                                <i class="close white-text fas fa-times"></i>
-                              </div>
-                              <div class="chip chip-md purple-gradient white-text example z-depth-2 mr-0"><i class="fas fa-headset fa-lg"></i>
-                                &nbsp;&nbsp;mdb-team
-                                <i class="close white-text fas fa-times"></i>
-                              </div>
-                              <div class="chip chip-md success-color white-text  example z-depth-2 mr-0"><i class="fas fa-tags "></i>
-                                &nbsp;&nbsp;Web Design
-                                <i class="close white-text fas fa-times"></i>
-                              </div>
-                              <div class="chip chip-md default-color white-text example z-depth-2 mr-0"><i class="fab fa-css3-alt fa-lg"></i>
-                                &nbsp;&nbsp;Css Tutorial
-                                <i class="close  white-text fas fa-times"></i>
-                              </div>
-
-                              <div class="chip chip-md  secondary-color white-text example z-depth-2 mr-0"><i class="fab fa-bootstrap fa-lg"></i>
-                                &nbsp;&nbsp;MDBootstrap
-                                <i class="close white-text fas fa-times"></i>
-                              </div>
-
-                              <div class="chip chip-md red lighten-1 white-text example z-depth-2 mr-0"><i class="fab fa-angular fa-lg"></i>
-                                &nbsp;&nbsp;Angular
-                                <i class="close white-text fas fa-times"></i>
-                              </div>
-                              <div class="chip chip-md blue lighten-1 white-text example z-depth-2 mr-0" ><i class="fab fa-react fa-lg"></i>
-                                &nbsp;&nbsp;React
-                                <i class="close white-text fas fa-times"></i>
-                              </div>
-                              <div class="chip chip-md indigo darken-1 white-text example z-depth-2 mr-0"><i class="fab fa-facebook fa-lg"></i>
-                                &nbsp;&nbsp;Facebook
-                                <i class="close white-text fas fa-times"></i>
-                              </div>
-                              <div class="chip chip-md purple-gradient white-text example z-depth-2 mr-0"><i class="fas fa-headset fa-lg"></i>
-                                &nbsp;&nbsp;mdb-team
-                                <i class="close white-text fas fa-times"></i>
-                              </div>
-                            </div>
-                          </div>
                     </div>
                     <div class="mb-3">
                         <div class="input-group" id="sendmessage" style="display: none;">
@@ -148,7 +52,8 @@
                             <span class="float-right">
                                 <button id="clear" class="btn btn-primary" onclick="clearBroadcast()" style="display: none;">Clear</button>
                             </span>
-                        </div>                    
+                        </div>
+                        <div id="response"></div>                        
                     </div>
                 </div>
             </div>
@@ -157,7 +62,7 @@
         <script th:src="@{/webjars/stomp-websocket/2.3.3-1/stomp.js}" type="text/javascript"></script>
         <script type="text/javascript">
             var stompClient = null;
-            var selectedUsername = null;
+            var selectedUser = null;
             var userName = $("#from").val();
             
             function setConnected(connected) {
@@ -175,6 +80,10 @@
             
             function connect() {
                 userName = $("#from").val();
+                if (userName == null || userName === "") {
+                    alert('Please input a nickname!');
+                    return;
+                }
                 $.post('/rest/user-connect',
                     { username: userName }, 
                     function(remoteAddr, status, xhr) {
@@ -232,19 +141,32 @@
             
             function sendConnection(message) {
                 var text = userName + message;
-                clientSend({'from': 'server', 'text': text});
+                sendBroadcast({'from': 'server', 'text': text});
                 
                 // for first time or last time, list active users:
                 updateUsers(userName);
             }
             
-            function clientSend(json) {
+            function sendBroadcast(json) {
                 stompClient.send("/app/broadcast", {}, JSON.stringify(json));
             }
             
+            /*
             function send() {
                 var text = $("#message").val();
-                clientSend({'from': userName, 'text': text});                
+                sendBroadcast({'from': userName, 'text': text});                
+                $("#message").val("");
+            }
+            */
+           
+            function send() {
+                var text = $("#message").val();
+                if (selectedUser == null) {
+                    alert('Please select a user.');
+                    return;
+                }
+                stompClient.send("/app/chat", {},
+                        JSON.stringify({'from': from, 'text': text, 'recipient': selectedUser}));                
                 $("#message").val("");
             }
 
@@ -269,17 +191,28 @@
                 $("#clear").hide();
             }
             
+            function getUserDiv(username) {
+                var strUser = 'content-' + username;
+                strUser = strUser.replace(/\s+/g, '-').toLowerCase();
+                return strUser;
+            }
+            
             function setSelectedUser(username) {
                 selectedUsername = username;
-                document.getElementById('response').innerHTML = '';
+                // document.getElementById('response').innerHTML = '';
+                
+                var strUser = getUserDiv(username);
+                $(".div-user").hide();
+                $("#" + strUser).show();
             }
             
             function updateUsers(userName) {
-                // console.log('List of users : ' + userList);
-                var activeUserUL = document.getElementById('active-users');
+                // console.log('List of users : ' + userList);               
+                var activeUserSpan = $("#active-users-span");
+                var activeUserUL = $("#active-users");
 
                 var index;
-                activeUserUL.innerHTML = '';
+                activeUserUL.html('');
                 
                 var url = '/rest/active-users-except/' + userName;
                 $.ajax({
@@ -289,14 +222,27 @@
                     dataType: 'json', // ** ensure you add this line **
                     success: function(userList) {
                         if (userList.length == 0) {
-                            activeUserUL.innerHTML = '<p><i>No active users found.</i></p>';
+                            activeUserSpan.html('<p><i>No active users found.</i></p>');
                         }
                         else {
-                            activeUserUL.innerHTML = '<p class="text-muted">click on user to begin chat</p>';
+                            activeUserSpan.html('<p class="text-muted">click on user to begin chat</p>');
                             
                             for (index = 0; index < userList.length; ++index) {
                                 if (userList[index] != userName) {
-                                    activeUserUL.innerHTML = activeUserUL.innerHTML + createUserNode(userList[index], index);
+                                    activeUserUL.html(activeUserUL.html() + createUserNode(userList[index], index));
+                                    var strUser = getUserDiv(userList[index]);
+                                    var userDivResponse = document.getElementById(strUser);
+                                    if (userDivResponse == null) {
+                                        var str = '<div class="div-user" id="' + strUser + '" style="display: none;">' +
+                                        '<h4>' + userList[index] + '</h4>' +
+                                        '<div id="resp-' + strUser + '"></div>' +
+                                        '<div>' +
+                                        '    <span class="float-right">' +
+                                        '        <button id="clear" class="btn btn-primary" onclick="clearBroadcast(\'' + strUser + '\')">Clear</button>' +
+                                        '    </span>' +
+                                        '</div></div>';
+                                        $("#response").append(str);
+                                    }
                                 }
                             }
                             /*
