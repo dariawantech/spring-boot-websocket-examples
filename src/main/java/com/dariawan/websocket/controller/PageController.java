@@ -36,29 +36,17 @@
  *   https://creativecommons.org/licenses/by-sa/4.0/
  *   https://creativecommons.org/licenses/by-sa/4.0/legalcode
  */
-package com.dariawan.websocket.dto;
+package com.dariawan.websocket.controller;
 
-import com.dariawan.websocket.util.StringUtils;
-import lombok.Getter;
-import lombok.Setter;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
-@Getter
-@Setter
-public class ChatMessage {
+@Controller
+public class PageController {
     
-    private String from;
-    private String text;
-    private String recipient;
-    private String time;
-
-    public ChatMessage() {
-        this.time = StringUtils.getCurrentTimeStamp();
-    }
-    
-    public ChatMessage(String from, String text, String recipient) {
-        this();
-        this.from = from;
-        this.text = text;
-        this.recipient = recipient;  
+    @GetMapping(value = {"/", "/index"})
+    public String index(Model model) {
+        return "index";
     }
 }

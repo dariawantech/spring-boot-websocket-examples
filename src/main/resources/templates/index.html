@@ -1,0 +1,51 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Spring Boot Web socket Example</title>
+        <th:block th:include="fragments/common.html :: headerfiles"></th:block>
+    </head>
+    <body>
+        <div class="pricing-header px-3 py-3 pb-md-4 mx-auto text-center">
+            <h1 class="display-4">Spring Boot + Web Socket Examples</h1>
+            <p class="lead">Examples for Web Sockets</p>
+        </div>
+
+        <div class="container">
+            <div class="card-deck mb-3 text-center">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <ul class="list-unstyled mt-3 mb-4">
+                            <li>Basic WebSocket broadcast<br/> without STOMP and SockJS</li>
+                        </ul>
+                        <button type="button" class="btn btn-lg btn-block btn-outline-primary" onclick="window.location.href = '/websocket'">Go To Sample</button>
+                    </div>
+                </div>
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <ul class="list-unstyled mt-3 mb-4">
+                            <li>WebSocket broadcast<br/> with STOMP</li>
+                        </ul>
+                        <button type="button" class="btn btn-lg btn-block btn-outline-primary" onclick="window.location.href = '/stomp-broadcast'">Go To Sample</button>
+                    </div>
+                </div>
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <ul class="list-unstyled mt-3 mb-4">
+                            <li>WebSocket broadcast<br/> with STOMP and SockJS</li>
+                        </ul>
+                        <button type="button" class="btn btn-lg btn-block btn-outline-primary" onclick="window.location.href = '/sockjs-broadcast'">Go To Sample</button>
+                    </div>
+                </div>
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <ul class="list-unstyled mt-3 mb-4">
+                            <li>WebSocket chat<br/> with STOMP and SockJS</li>
+                        </ul>
+                        <button type="button" class="btn btn-lg btn-block btn-outline-primary" onclick="window.location.href = '/sockjs-message'">Go To Sample</button>
+                    </div>
+                </div>
+            </div>
+
+            <footer th:insert="fragments/common.html :: footer"></footer>
+        </div>
+    </body>
+</html>

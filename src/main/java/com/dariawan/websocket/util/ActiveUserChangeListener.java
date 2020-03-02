@@ -36,29 +36,15 @@
  *   https://creativecommons.org/licenses/by-sa/4.0/
  *   https://creativecommons.org/licenses/by-sa/4.0/legalcode
  */
-package com.dariawan.websocket.dto;
+package com.dariawan.websocket.util;
 
-import com.dariawan.websocket.util.StringUtils;
-import lombok.Getter;
-import lombok.Setter;
+/**
+ * This interface used as an Observer for  ActiveUserManager class
+ */
+public interface ActiveUserChangeListener {
 
-@Getter
-@Setter
-public class ChatMessage {
-    
-    private String from;
-    private String text;
-    private String recipient;
-    private String time;
-
-    public ChatMessage() {
-        this.time = StringUtils.getCurrentTimeStamp();
-    }
-    
-    public ChatMessage(String from, String text, String recipient) {
-        this();
-        this.from = from;
-        this.text = text;
-        this.recipient = recipient;  
-    }
+    /**
+     * call when Observable's internal state is changed.
+     */
+    void notifyActiveUserChange();
 }

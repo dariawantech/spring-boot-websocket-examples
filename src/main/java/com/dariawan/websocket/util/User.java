@@ -36,29 +36,20 @@
  *   https://creativecommons.org/licenses/by-sa/4.0/
  *   https://creativecommons.org/licenses/by-sa/4.0/legalcode
  */
-package com.dariawan.websocket.dto;
+package com.dariawan.websocket.util;
 
-import com.dariawan.websocket.util.StringUtils;
-import lombok.Getter;
-import lombok.Setter;
+import java.security.Principal;
 
-@Getter
-@Setter
-public class ChatMessage {
-    
-    private String from;
-    private String text;
-    private String recipient;
-    private String time;
+public class User implements Principal {
 
-    public ChatMessage() {
-        this.time = StringUtils.getCurrentTimeStamp();
+    String name;
+
+    public User(String name) {
+        this.name = name;
     }
-    
-    public ChatMessage(String from, String text, String recipient) {
-        this();
-        this.from = from;
-        this.text = text;
-        this.recipient = recipient;  
+
+    @Override
+    public String getName() {
+        return name;
     }
 }

@@ -50,7 +50,7 @@
                         <div id="content"></div>
                         <div>
                             <span class="float-right">
-                                <button id="clear" class="btn btn-primary" onclick="clearBroadcast()" style="display: none;">Clear</button>
+                                <button id="clear" class="btn btn-primary" onclick="clearMessages()" style="display: none;">Clear</button>
                             </span>
                         </div>
                         <div id="response"></div>                        
@@ -87,13 +87,11 @@
                 $.post('/rest/user-connect',
                     { username: userName }, 
                     function(remoteAddr, status, xhr) {
-                        // $("#ptest").append('status: ' + status + ', remoteAddr ' + remoteAddr);
-                        
-                        var socket = new SockJS('/broadcast');
+                        var socket = new SockJS('/chat');
                         stompClient = Stomp.over(socket);
-                        stompClient.connect({}, function () {
+                        stompClient.connect({username: userName}, function () {
                             stompClient.subscribe('/topic/broadcast', function (output) {
-                                showBroadcastMessage(createTextNode(JSON.parse(output.body)));
+                                showMessage(createTextNode(JSON.parse(output.body)));
                             });
                             
                             stompClient.subscribe('/topic/active', function () {
@@ -101,10 +99,10 @@
                             });
                             
                             stompClient.subscribe('/user/queue/messages', function (output) {
-                                showMessageOutput(JSON.parse(output.body));
+                                showMessage(createTextNode(JSON.parse(output.body)));
                             });
 
-                            sendConnection(' connected to server');                
+                            sendConnection(' connected to server');
                             setConnected(true);
                         }, function (err) {
                             alert('error' + err);
@@ -128,7 +126,7 @@
                             stompClient.disconnect(function() {
                                 console.log('disconnected...');
                                 setConnected(false);
-                            });    
+                            });
 
                         }).done(function() { 
                             // alert('Request done!'); 
@@ -150,14 +148,6 @@
             function sendBroadcast(json) {
                 stompClient.send("/app/broadcast", {}, JSON.stringify(json));
             }
-            
-            /*
-            function send() {
-                var text = $("#message").val();
-                sendBroadcast({'from': userName, 'text': text});                
-                $("#message").val("");
-            }
-            */
            
             function send() {
                 var text = $("#message").val();
@@ -165,45 +155,43 @@
                     alert('Please select a user.');
                     return;
                 }
-                stompClient.send("/app/chat", {},
-                        JSON.stringify({'from': from, 'text': text, 'recipient': selectedUser}));                
+                stompClient.send("/app/chat", {'sender': userName},
+                        JSON.stringify({'from': userName, 'text': text, 'recipient': selectedUser}));                
                 $("#message").val("");
             }
 
             function createTextNode(messageObj) {
-                return '<div class="row alert alert-info"><div class="col-md-8">' +
+                var classAlert = 'alert-info';
+                var fromTo = messageObj.from;
+                if (userName != messageObj.from && messageObj.from != "server") {
+                    classAlert = "alert-warning";
+                }
+                else {
+                    fromTo = 'to: ' + messageObj.recipient;
+                }
+                 
+                return '<div class="row alert ' + classAlert + '"><div class="col-md-8">' +
                         messageObj.text +
                         '</div><div class="col-md-4 text-right"><small>[<b>' +
-                        messageObj.from +
+                        fromTo +
                         '</b> ' +
                         messageObj.time + 
                         ']</small>' +
                         '</div></div>';
             }
             
-            function showBroadcastMessage(message) {
+            function showMessage(message) {
                 $("#content").html($("#content").html() + message);
                 $("#clear").show();
             }
             
-            function clearBroadcast() {
+            function clearMessages() {
                 $("#content").html("");
                 $("#clear").hide();
             }
             
-            function getUserDiv(username) {
-                var strUser = 'content-' + username;
-                strUser = strUser.replace(/\s+/g, '-').toLowerCase();
-                return strUser;
-            }
-            
             function setSelectedUser(username) {
-                selectedUsername = username;
-                // document.getElementById('response').innerHTML = '';
-                
-                var strUser = getUserDiv(username);
-                $(".div-user").hide();
-                $("#" + strUser).show();
+                selectedUser = username;                
             }
             
             function updateUsers(userName) {
@@ -229,20 +217,7 @@
                             
                             for (index = 0; index < userList.length; ++index) {
                                 if (userList[index] != userName) {
-                                    activeUserUL.html(activeUserUL.html() + createUserNode(userList[index], index));
-                                    var strUser = getUserDiv(userList[index]);
-                                    var userDivResponse = document.getElementById(strUser);
-                                    if (userDivResponse == null) {
-                                        var str = '<div class="div-user" id="' + strUser + '" style="display: none;">' +
-                                        '<h4>' + userList[index] + '</h4>' +
-                                        '<div id="resp-' + strUser + '"></div>' +
-                                        '<div>' +
-                                        '    <span class="float-right">' +
-                                        '        <button id="clear" class="btn btn-primary" onclick="clearBroadcast(\'' + strUser + '\')">Clear</button>' +
-                                        '    </span>' +
-                                        '</div></div>';
-                                        $("#response").append(str);
-                                    }
+                                    activeUserUL.html(activeUserUL.html() + createUserNode(userList[index], index));                                    
                                 }
                             }
                             /*
@@ -260,8 +235,8 @@
             
             function createUserNode(username, index) {
                 return '<li class="list-group-item">' +
-                        '<a class="active-user" href="javascript:void(0)" onclick="setSelectedUser(\'' + username + '\')">' + username + '</a>' +
-                        '</li>';
+                       '<a class="active-user" href="javascript:void(0)" onclick="setSelectedUser(\'' + username + '\')">' + username + '</a>' +
+                       '</li>';
             }
         </script>
     </body>

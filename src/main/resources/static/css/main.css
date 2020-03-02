@@ -2,3 +2,17 @@
     padding: 0.25rem 1.25rem !important;
     margin-bottom: 0.25rem !important;    
 }
+
+.list-group {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 0.5em;
+}
+
+.list-group-item {
+    background: #F7F7F7;
+    padding: 0.5em;
+    text-align: center;
+    border-left-width: 1px !important;
+    border-top-width: 1px !important;
+}

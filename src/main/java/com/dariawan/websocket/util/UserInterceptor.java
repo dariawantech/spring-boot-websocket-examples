@@ -36,29 +36,39 @@
  *   https://creativecommons.org/licenses/by-sa/4.0/
  *   https://creativecommons.org/licenses/by-sa/4.0/legalcode
  */
-package com.dariawan.websocket.dto;
+package com.dariawan.websocket.util;
 
-import com.dariawan.websocket.util.StringUtils;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.LinkedList;
+import java.util.Map;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.stomp.StompCommand;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.messaging.support.MessageHeaderAccessor;
 
-@Getter
-@Setter
-public class ChatMessage {
-    
-    private String from;
-    private String text;
-    private String recipient;
-    private String time;
+public class UserInterceptor implements ChannelInterceptor {
 
-    public ChatMessage() {
-        this.time = StringUtils.getCurrentTimeStamp();
-    }
-    
-    public ChatMessage(String from, String text, String recipient) {
-        this();
-        this.from = from;
-        this.text = text;
-        this.recipient = recipient;  
+    @Override
+    public Message<?> preSend(Message<?> message, MessageChannel channel) {
+
+        StompHeaderAccessor accessor
+                = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+
+        if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+            Object raw = message
+                    .getHeaders()
+                    .get(SimpMessageHeaderAccessor.NATIVE_HEADERS);
+
+            if (raw instanceof Map) {
+                Object name = ((Map) raw).get("username");
+
+                if (name instanceof LinkedList) {
+                    accessor.setUser(new User(((LinkedList) name).get(0).toString()));
+                }
+            }
+        }
+        return message;
     }
 }
