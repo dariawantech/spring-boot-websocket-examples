@@ -37,7 +37,10 @@
                             <!--*/-->                            
                         </ul>
                     </div>
-                    <div class="mb-3">
+                    <div id="divSelectedUser" class="mb-3" style="display: none;">
+                        <span id="selectedUser" class="badge badge-secondary"></span> Selected
+                    </div>
+                    <div class="mb-3">                        
                         <div class="input-group" id="sendmessage" style="display: none;">
                             <input type="text" id="message" class="form-control" placeholder="Message">
                             <div class="input-group-append">
@@ -163,17 +166,24 @@
             function createTextNode(messageObj) {
                 var classAlert = 'alert-info';
                 var fromTo = messageObj.from;
+                var addTo =  fromTo;
+                
+                if (userName == messageObj.from) {
+                    fromTo = messageObj.recipient;
+                    addTo =  'to: ' + fromTo;
+                }
+                
                 if (userName != messageObj.from && messageObj.from != "server") {
                     classAlert = "alert-warning";
                 }
-                else {
-                    fromTo = 'to: ' + messageObj.recipient;
+                
+                if (messageObj.from != "server") {
+                    addTo = '<a href="javascript:void(0)" onclick="setSelectedUser(\'' + fromTo + '\')">' + addTo + '</a>'
                 }
-                 
                 return '<div class="row alert ' + classAlert + '"><div class="col-md-8">' +
                         messageObj.text +
                         '</div><div class="col-md-4 text-right"><small>[<b>' +
-                        fromTo +
+                        addTo +
                         '</b> ' +
                         messageObj.time + 
                         ']</small>' +
@@ -191,7 +201,14 @@
             }
             
             function setSelectedUser(username) {
-                selectedUser = username;                
+                selectedUser = username;
+                $("#selectedUser").html(selectedUser);
+                if ($("#selectedUser").html() == "") {
+                    $("#divSelectedUser").hide();
+                }
+                else {
+                    $("#divSelectedUser").show();
+                }
             }
             
             function updateUsers(userName) {

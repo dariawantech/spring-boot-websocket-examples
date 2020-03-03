@@ -44,6 +44,7 @@
         <script th:src="@{/webjars/stomp-websocket/2.3.3-1/stomp.js}" type="text/javascript"></script>
         <script type="text/javascript">
             var stompClient = null;
+            var userName = $("#from").val();
             
             function setConnected(connected) {
                 $("#from").prop("disabled", connected);
@@ -57,6 +58,11 @@
             }
             
             function connect() {
+                userName = $("#from").val();
+                if (userName == null || userName === "") {
+                    alert('Please input a nickname!');
+                    return;
+                }
                  /*<![CDATA[*/
                 var url = /*[['ws://'+${#httpServletRequest.serverName}+':'+${#httpServletRequest.serverPort}+@{/broadcast}]]*/ 'ws://localhost:8080/broadcast';
                 /*]]>*/
@@ -85,8 +91,7 @@
             }
             
             function sendConnection(message) {
-                var from = $("#from").val();
-                var text = from + message;
+                var text = userName + message;
                 sendBroadcast({'from': 'server', 'text': text});
             }
                     
@@ -95,9 +100,8 @@
             }
             
             function send() {
-                var from = $("#from").val();
                 var text = $("#message").val();
-                sendBroadcast({'from': from, 'text': text});
+                sendBroadcast({'from': userName, 'text': text});
                 $("#message").val("");
             }
 
