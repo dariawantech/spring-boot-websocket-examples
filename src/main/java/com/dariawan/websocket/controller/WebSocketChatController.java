@@ -36,15 +36,10 @@ package com.dariawan.websocket.controller;
 import com.dariawan.websocket.dto.ChatMessage;
 import com.dariawan.websocket.util.ActiveUserManager;
 import com.dariawan.websocket.util.ActiveUserChangeListener;
-import java.security.Principal;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -55,8 +50,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class WebSocketChatController implements ActiveUserChangeListener {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(WebSocketChatController.class);
-    
+    // private final static Logger LOGGER = LoggerFactory.getLogger(WebSocketChatController.class);    
     
     @Autowired
     private SimpMessagingTemplate webSocket;
@@ -82,14 +76,12 @@ public class WebSocketChatController implements ActiveUserChangeListener {
     @MessageMapping("/chat")
     public void send(SimpMessageHeaderAccessor sha, @Payload ChatMessage chatMessage) throws Exception {
         String sender = sha.getUser().getName();
-        
+        ChatMessage message = new ChatMessage(chatMessage.getFrom(), chatMessage.getText(), chatMessage.getRecipient());
         if (!sender.equals(chatMessage.getRecipient())) {
-            webSocket.convertAndSendToUser(sender, "/queue/messages",
-                    new ChatMessage(chatMessage.getFrom(), chatMessage.getText(), chatMessage.getRecipient()));
+            webSocket.convertAndSendToUser(sender, "/queue/messages", message);
         }
 
-        webSocket.convertAndSendToUser(chatMessage.getRecipient(), "/queue/messages",
-                new ChatMessage(chatMessage.getFrom(), chatMessage.getText(), chatMessage.getRecipient()));
+        webSocket.convertAndSendToUser(chatMessage.getRecipient(), "/queue/messages", message);
     }
 
     @Override
